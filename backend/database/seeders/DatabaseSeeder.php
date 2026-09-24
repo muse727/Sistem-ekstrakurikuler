@@ -5,13 +5,16 @@ namespace Database\Seeders;
 use App\Enums\CoachRole;
 use App\Enums\DayOfWeek;
 use App\Enums\Gender;
+use App\Enums\UserRole;
 use App\Models\AcademicYear;
 use App\Models\Coach;
 use App\Models\Extracurricular;
 use App\Models\ExtracurricularSchedule;
 use App\Models\Student;
+use App\Models\User;
 use App\Models\Venue;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -29,7 +32,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 2. Students (3 records)
-        Student::create([
+        $student1 = Student::create([
             'student_number' => '2026001',
             'nisn' => '0081234567',
             'name' => 'Ahmad Rizky Pratama',
@@ -41,7 +44,7 @@ class DatabaseSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        Student::create([
+        $student2 = Student::create([
             'student_number' => '2026002',
             'nisn' => '0087654321',
             'name' => 'Siti Nurhaliza',
@@ -53,7 +56,7 @@ class DatabaseSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        Student::create([
+        $student3 = Student::create([
             'student_number' => '2026003',
             'nisn' => null, // NISN nullable test
             'name' => 'Budi Santoso',
@@ -149,6 +152,56 @@ class DatabaseSeeder extends Seeder
             'start_time' => '08:00:00',
             'end_time' => '11:00:00',
             'is_active' => true,
+        ]);
+
+        // 8. Development Seed Users (T003)
+        $defaultPassword = Hash::make('password123');
+
+        // Super Admin
+        User::create([
+            'name' => 'Super Administrator',
+            'email' => 'superadmin@example.test',
+            'password' => $defaultPassword,
+            'role' => UserRole::SUPER_ADMIN,
+            'is_active' => true,
+        ]);
+
+        // Admin
+        User::create([
+            'name' => 'School Admin',
+            'email' => 'admin@example.test',
+            'password' => $defaultPassword,
+            'role' => UserRole::ADMIN,
+            'is_active' => true,
+        ]);
+
+        // Coach
+        User::create([
+            'name' => 'Coach Bambang',
+            'email' => 'coach@example.test',
+            'password' => $defaultPassword,
+            'role' => UserRole::COACH,
+            'coach_id' => $coach1->id,
+            'is_active' => true,
+        ]);
+
+        // Student
+        User::create([
+            'name' => 'Ahmad Rizky',
+            'email' => 'student@example.test',
+            'password' => $defaultPassword,
+            'role' => UserRole::STUDENT,
+            'student_id' => $student1->id,
+            'is_active' => true,
+        ]);
+
+        // Inactive User (for testing/safety check)
+        User::create([
+            'name' => 'Inactive User',
+            'email' => 'inactive@example.test',
+            'password' => $defaultPassword,
+            'role' => UserRole::STUDENT,
+            'is_active' => false,
         ]);
     }
 }

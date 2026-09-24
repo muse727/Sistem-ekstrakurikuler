@@ -1,0 +1,34 @@
+# Root Gitignore for Sistem Ekstrakurikuler
+
+# Backend ignores
+/backend/vendor/
+/backend/.env
+/backend/storage/*.key
+/backend/storage/framework/cache/data/*
+/backend/storage/framework/sessions/*
+/backend/storage/framework/testing/*
+/backend/storage/framework/views/*
+/backend/storage/logs/*
+/backend/bootstrap/cache/*
+/backend/public/storage
+/backend/public/build
+/backend/.phpunit.result.cache
+
+# Frontend ignores
+/frontend/node_modules/
+/frontend/dist/
+/frontend/dist-ssr/
+/frontend/.env
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local
+/frontend/*.tsbuildinfo
+
+# OS & Editor ignores
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/

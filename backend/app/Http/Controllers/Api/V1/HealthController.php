@@ -17,4 +17,9 @@ class HealthController extends Controller
             'message' => 'API is healthy',
         ], 200);
     }
+
+    public function index(): JsonResponse
+    {
+        return $this->__invoke();
+    }
 }

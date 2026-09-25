@@ -1,21 +1,5 @@
+import api from '../../lib/api';
 import type { AuthResponse, LoginCredentials, ProfileResponse } from './types';
-import axios from 'axios';
-
-const api = axios.create({
-  baseURL: '/api/v1',
-  headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  },
-});
-
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('auth_token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
 
 export const authApi = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {

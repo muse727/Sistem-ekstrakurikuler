@@ -19,4 +19,47 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
+
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\ConflictHttpException $e, Request $request) {
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return \App\Http\ApiResponse::error($e->getMessage() ?: 'Conflict', null, 409);
+            }
+            return null;
+        });
+
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException $e, Request $request) {
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return \App\Http\ApiResponse::error($e->getMessage() ?: 'Unprocessable entity', null, 422);
+            }
+            return null;
+        });
+
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, Request $request) {
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return \App\Http\ApiResponse::error('Not found', null, 404);
+            }
+            return null;
+        });
+
+        $exceptions->render(function (\Illuminate\Database\Eloquent\ModelNotFoundException $e, Request $request) {
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return \App\Http\ApiResponse::error('Not found', null, 404);
+            }
+            return null;
+        });
+
+        $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, Request $request) {
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return \App\Http\ApiResponse::error('Unauthenticated', null, 401);
+            }
+            return null;
+        });
+
+        $exceptions->render(function (\Illuminate\Database\QueryException $e, Request $request) {
+            if (($request->is('api/*') || $request->expectsJson())
+                && str_contains($e->getMessage(), 'registrations_active_key_unique')) {
+                return \App\Http\ApiResponse::error('You already have an active registration for this extracurricular.', null, 409);
+            }
+            return null;
+        });
     })->create();

@@ -6,6 +6,7 @@ use App\Enums\RegistrationStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ExtracurricularRegistration extends Model
 {
@@ -92,5 +93,10 @@ class ExtracurricularRegistration extends Model
     public function canceller(): BelongsTo
     {
         return $this->belongsTo(User::class, 'cancelled_by');
+    }
+
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(ExtracurricularInvoice::class, 'registration_id')->orderByDesc('id');
     }
 }

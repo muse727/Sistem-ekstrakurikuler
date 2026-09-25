@@ -6,6 +6,10 @@ import { RequireAuth, RequireAdmin } from './features/admin/components/AdminGuar
 import { AcademicYearsPage } from './features/admin/pages/AcademicYearsPage';
 import { StudentsPage } from './features/admin/pages/StudentsPage';
 import { AdminRegistrationsPage } from './features/admin/pages/RegistrationsPage';
+import { AdminPaymentsPage } from './features/payments/pages/AdminPaymentsPage';
+import { AdminPaymentDetailPage } from './features/payments/pages/AdminPaymentDetailPage';
+import { MyPaymentsPage } from './features/payments/pages/MyPaymentsPage';
+import { MyPaymentDetailPage } from './features/payments/pages/MyPaymentDetailPage';
 import { StudentLayout, RequireStudent } from './features/registrations/components/StudentLayout';
 import { ExtracurricularsPage } from './features/registrations/pages/ExtracurricularsPage';
 import { ExtracurricularDetailPage } from './features/registrations/pages/ExtracurricularDetailPage';
@@ -33,6 +37,8 @@ function App() {
             <Route path="academic-years" element={<AcademicYearsPage />} />
             <Route path="students" element={<StudentsPage />} />
             <Route path="registrations" element={<AdminRegistrationsPage />} />
+            <Route path="payments" element={<AdminPaymentsPage />} />
+            <Route path="payments/:id" element={<AdminPaymentDetailPage />} />
             <Route index element={<Navigate to="registrations" replace />} />
           </Route>
 
@@ -50,6 +56,8 @@ function App() {
             <Route path="extracurriculars/:id" element={<ExtracurricularDetailPage />} />
             <Route path="registrations" element={<MyRegistrationsPage />} />
             <Route path="registrations/:id" element={<MyRegistrationDetailPage />} />
+            <Route path="payments" element={<MyPaymentsPage />} />
+            <Route path="payments/:id" element={<MyPaymentDetailPage />} />
             <Route index element={<Navigate to="extracurriculars" replace />} />
           </Route>
 

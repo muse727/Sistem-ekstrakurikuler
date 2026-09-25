@@ -148,7 +148,10 @@ class RegistrationService
                 'approved_by' => $actorId,
             ]);
 
-            return $registration->fresh()->load(['student', 'extracurricular', 'academicYear', 'approver', 'rejector', 'canceller']);
+            $fresh = $registration->fresh();
+            app(\App\Services\PaymentService::class)->createInvoiceForRegistration($fresh);
+
+            return $fresh->fresh()->load(['student', 'extracurricular', 'academicYear', 'approver', 'rejector', 'canceller', 'invoices']);
         });
     }
 
@@ -207,6 +210,8 @@ class RegistrationService
                 'cancelled_at' => now(),
                 'cancelled_by' => $actorId,
             ]);
+
+            app(\App\Services\PaymentService::class)->cancelActiveInvoicesForRegistration((int) $registration->id);
 
             return $registration->fresh()->load(['student', 'extracurricular', 'academicYear', 'approver', 'rejector', 'canceller']);
         });

@@ -27,6 +27,9 @@ export function StudentLayout() {
           <NavLink to="/student/registrations" className={({ isActive }) => (isActive ? 'active' : '')}>
             Pendaftaranku
           </NavLink>
+          <NavLink to="/student/payments" className={({ isActive }) => (isActive ? 'active' : '')}>
+            Pembayaranku
+          </NavLink>
         </nav>
         <button className="admin-logout" onClick={handleLogout}>
           Logout

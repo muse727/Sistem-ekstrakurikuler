@@ -12,6 +12,8 @@ use App\Http\Controllers\Api\V1\CoachController;
 use App\Http\Controllers\Api\V1\ExtracurricularController;
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\StudentController;
+use App\Http\Controllers\Api\V1\Admin\PaymentController as AdminPaymentController;
+use App\Http\Controllers\Api\V1\Student\PaymentController as StudentPaymentController;
 use App\Http\Controllers\Api\V1\Student\RegistrationController as StudentRegistrationController;
 use App\Http\Controllers\Api\V1\VenueController;
 use App\Http\Middleware\EnsureUserHasRole;
@@ -91,6 +93,13 @@ Route::prefix('v1')->group(function () {
         Route::post('/registrations/{registration}/activate', [AdminRegistrationController::class, 'activate']);
         Route::post('/registrations/{registration}/cancel', [AdminRegistrationController::class, 'cancel']);
 
+        // Payments & invoices (T006)
+        Route::get('/payments', [AdminPaymentController::class, 'index']);
+        Route::get('/payments/{invoice}', [AdminPaymentController::class, 'show']);
+        Route::post('/payments/{invoice}/verify', [AdminPaymentController::class, 'verify']);
+        Route::post('/payments/{invoice}/reject', [AdminPaymentController::class, 'reject']);
+        Route::get('/payments/{invoice}/proofs/{proof}/file', [AdminPaymentController::class, 'downloadProof']);
+
         Route::get('/test', function () {
             return response()->json(['success' => true, 'message' => 'Admin authorized']);
         });
@@ -104,6 +113,12 @@ Route::prefix('v1')->group(function () {
         Route::post('/registrations', [StudentRegistrationController::class, 'store']);
         Route::get('/registrations/{registration}', [StudentRegistrationController::class, 'show']);
         Route::post('/registrations/{registration}/cancel', [StudentRegistrationController::class, 'cancel']);
+
+        // Payments & invoices (T006)
+        Route::get('/payments', [StudentPaymentController::class, 'index']);
+        Route::get('/payments/{invoice}', [StudentPaymentController::class, 'show']);
+        Route::post('/payments/{invoice}/proof', [StudentPaymentController::class, 'uploadProof']);
+        Route::get('/payments/{invoice}/proofs/{proof}/file', [StudentPaymentController::class, 'downloadProof']);
     });
 
     // Example Role Restricted Test Endpoints

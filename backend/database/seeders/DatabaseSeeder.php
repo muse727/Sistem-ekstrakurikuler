@@ -203,5 +203,24 @@ class DatabaseSeeder extends Seeder
             'role' => UserRole::STUDENT,
             'is_active' => false,
         ]);
+
+        // 9. Demo payment examples (T006, fake dev data only)
+        $admin = User::where('email', 'admin@example.test')->first();
+        if ($admin && isset($ekskul1) && isset($student1, $student2) && isset($academicYear)) {
+            $regSvc = app(\App\Services\PaymentService::class);
+            $demoReg = \App\Models\ExtracurricularRegistration::create([
+                'student_id' => $student1->id,
+                'extracurricular_id' => $ekskul1->id,
+                'academic_year_id' => $academicYear->id,
+                'status' => \App\Enums\RegistrationStatus::APPROVED,
+                'submitted_at' => now()->subDays(3),
+                'approved_at' => now()->subDays(2),
+                'approved_by' => $admin->id,
+            ]);
+            try {
+                $regSvc->createInvoiceForRegistration($demoReg);
+            } catch (\Throwable $e) {
+            }
+        }
     }
 }

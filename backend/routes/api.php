@@ -13,8 +13,11 @@ use App\Http\Controllers\Api\V1\ExtracurricularController;
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\Admin\PaymentController as AdminPaymentController;
+use App\Http\Controllers\Api\V1\Admin\SessionController as AdminSessionController;
+use App\Http\Controllers\Api\V1\Coach\SessionController as CoachSessionController;
 use App\Http\Controllers\Api\V1\Student\PaymentController as StudentPaymentController;
 use App\Http\Controllers\Api\V1\Student\RegistrationController as StudentRegistrationController;
+use App\Http\Controllers\Api\V1\Student\SessionController as StudentSessionController;
 use App\Http\Controllers\Api\V1\VenueController;
 use App\Http\Middleware\EnsureUserHasRole;
 use Illuminate\Support\Facades\Route;
@@ -100,6 +103,18 @@ Route::prefix('v1')->group(function () {
         Route::post('/payments/{invoice}/reject', [AdminPaymentController::class, 'reject']);
         Route::get('/payments/{invoice}/proofs/{proof}/file', [AdminPaymentController::class, 'downloadProof']);
 
+        // Sessions & attendance (T007)
+        Route::get('/sessions', [AdminSessionController::class, 'index']);
+        Route::post('/sessions', [AdminSessionController::class, 'store']);
+        Route::get('/sessions/{session}', [AdminSessionController::class, 'show']);
+        Route::post('/sessions/{session}/open', [AdminSessionController::class, 'open']);
+        Route::post('/sessions/{session}/complete', [AdminSessionController::class, 'complete']);
+        Route::post('/sessions/{session}/cancel', [AdminSessionController::class, 'cancel']);
+        Route::get('/sessions/{session}/check-ins', [AdminSessionController::class, 'checkIns']);
+        Route::get('/sessions/{session}/attendance', [AdminSessionController::class, 'attendance']);
+        Route::post('/sessions/{session}/attendance', [AdminSessionController::class, 'recordBulk']);
+        Route::post('/sessions/{session}/attendance/{attendance}', [AdminSessionController::class, 'correct']);
+
         Route::get('/test', function () {
             return response()->json(['success' => true, 'message' => 'Admin authorized']);
         });
@@ -119,7 +134,27 @@ Route::prefix('v1')->group(function () {
         Route::get('/payments/{invoice}', [StudentPaymentController::class, 'show']);
         Route::post('/payments/{invoice}/proof', [StudentPaymentController::class, 'uploadProof']);
         Route::get('/payments/{invoice}/proofs/{proof}/file', [StudentPaymentController::class, 'downloadProof']);
+
+        // Sessions & attendance (T007, view own only)
+        Route::get('/sessions', [StudentSessionController::class, 'index']);
+        Route::get('/sessions/{session}', [StudentSessionController::class, 'show']);
+        Route::get('/attendance', [StudentSessionController::class, 'attendance']);
+        Route::get('/attendance/{attendance}', [StudentSessionController::class, 'showAttendance']);
     });
+
+    // Coach sessions & attendance (T007, assigned only)
+    Route::middleware(['auth:sanctum', EnsureUserHasRole::class . ':coach'])->prefix('coach')->group(function () {
+        Route::get('/sessions', [CoachSessionController::class, 'index']);
+        Route::get('/sessions/{session}', [CoachSessionController::class, 'show']);
+        Route::post('/sessions/{session}/check-in', [CoachSessionController::class, 'checkIn']);
+        Route::get('/sessions/{session}/attendance', [CoachSessionController::class, 'attendance']);
+        Route::post('/sessions/{session}/attendance', [CoachSessionController::class, 'recordBulk']);
+        Route::post('/sessions/{session}/attendance/{student}', [CoachSessionController::class, 'recordOne']);
+        Route::get('/attendance', [CoachSessionController::class, 'myAttendance']);
+    });
+
+    // Protected check-in photo (owner coach + admin/super_admin only)
+    Route::middleware(['auth:sanctum'])->get('/check-ins/{checkIn}/photo', [AdminSessionController::class, 'checkInPhoto'])->name('api.v1.checkin.photo');
 
     // Example Role Restricted Test Endpoints
     Route::middleware(['auth:sanctum', EnsureUserHasRole::class.':coach'])->get('/coach/test', function () {

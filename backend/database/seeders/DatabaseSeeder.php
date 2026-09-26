@@ -222,5 +222,33 @@ class DatabaseSeeder extends Seeder
             } catch (\Throwable $e) {
             }
         }
+
+        // 10. Demo session & attendance (T007, fake dev data only)
+        if (isset($ekskul1, $venue1, $academicYear, $student1, $student2, $coach1, $admin)) {
+            try {
+                $sessionSvc = app(\App\Services\SessionService::class);
+                $demoSession = $sessionSvc->createSession((int) $admin->id, [
+                    'extracurricular_id' => $ekskul1->id,
+                    'academic_year_id' => $academicYear->id,
+                    'venue_id' => $venue1->id,
+                    'session_date' => now()->toDateString(),
+                    'start_time' => '15:30',
+                    'end_time' => '17:30',
+                    'topic' => 'Latihan rutin mingguan',
+                    'notes' => 'Contoh sesi demo T007',
+                ]);
+                $sessionSvc->open($demoSession->fresh());
+                \App\Models\ExtracurricularRegistration::create([
+                    'student_id' => $student2->id,
+                    'extracurricular_id' => $ekskul1->id,
+                    'academic_year_id' => $academicYear->id,
+                    'status' => \App\Enums\RegistrationStatus::ACTIVE,
+                    'submitted_at' => now()->subDays(6),
+                    'approved_at' => now()->subDays(5),
+                    'approved_by' => $admin->id,
+                ]);
+            } catch (\Throwable $e) {
+            }
+        }
     }
 }

@@ -47,6 +47,21 @@ export function AdminLayout() {
           <NavLink to="/admin/evaluations" className={({ isActive }) => (isActive ? 'active' : '')}>
             Evaluasi
           </NavLink>
+          <NavLink to="/admin/dashboard" className={({ isActive }) => (isActive ? 'active' : '')}>
+            Dashboard
+          </NavLink>
+          <NavLink to="/admin/reports/membership" className={({ isActive }) => (isActive ? 'active' : '')}>
+            Lap. Keanggotaan
+          </NavLink>
+          <NavLink to="/admin/reports/payments" className={({ isActive }) => (isActive ? 'active' : '')}>
+            Lap. Pembayaran
+          </NavLink>
+          <NavLink to="/admin/reports/attendance" className={({ isActive }) => (isActive ? 'active' : '')}>
+            Lap. Kehadiran
+          </NavLink>
+          <NavLink to="/admin/reports/evaluations" className={({ isActive }) => (isActive ? 'active' : '')}>
+            Lap. Evaluasi
+          </NavLink>
         </nav>
         <button className="admin-logout" onClick={handleLogout}>
           Logout

@@ -15,6 +15,10 @@ use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Api\V1\Admin\EvaluationController as AdminEvaluationController;
 use App\Http\Controllers\Api\V1\Admin\SessionController as AdminSessionController;
+use App\Http\Controllers\Api\V1\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Api\V1\Admin\ReportController as AdminReportController;
+use App\Http\Controllers\Api\V1\Coach\DashboardController as CoachDashboardController;
+use App\Http\Controllers\Api\V1\Student\DashboardController as StudentDashboardController;
 use App\Http\Controllers\Api\V1\Coach\EvaluationController as CoachEvaluationController;
 use App\Http\Controllers\Api\V1\Coach\SessionController as CoachSessionController;
 use App\Http\Controllers\Api\V1\Student\EvaluationController as StudentEvaluationController;
@@ -126,6 +130,14 @@ Route::prefix('v1')->group(function () {
         Route::post('/evaluations/{evaluation}/unpublish', [AdminEvaluationController::class, 'unpublish']);
         Route::get('/evaluations/{evaluation}/summary', [AdminEvaluationController::class, 'summary']);
 
+        // Reporting & dashboards (T009, read-only)
+        Route::get('/dashboard', [AdminDashboardController::class, 'index']);
+        Route::get('/reports/membership', [AdminReportController::class, 'membership']);
+        Route::get('/reports/payments', [AdminReportController::class, 'payments']);
+        Route::get('/reports/attendance', [AdminReportController::class, 'attendance']);
+        Route::get('/reports/evaluations', [AdminReportController::class, 'evaluations']);
+        Route::get('/reports/extracurriculars', [AdminReportController::class, 'extracurriculars']);
+
         Route::get('/test', function () {
             return response()->json(['success' => true, 'message' => 'Admin authorized']);
         });
@@ -156,6 +168,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/evaluations', [StudentEvaluationController::class, 'index']);
         Route::get('/evaluations/{evaluation}', [StudentEvaluationController::class, 'show']);
         Route::get('/evaluations/{evaluation}/summary', [StudentEvaluationController::class, 'summary']);
+
+        // Dashboard (T009, read-only, own only)
+        Route::get('/dashboard', [StudentDashboardController::class, 'index']);
     });
 
     // Coach sessions & attendance (T007, assigned only)
@@ -167,6 +182,9 @@ Route::prefix('v1')->group(function () {
         Route::post('/sessions/{session}/attendance', [CoachSessionController::class, 'recordBulk']);
         Route::post('/sessions/{session}/attendance/{student}', [CoachSessionController::class, 'recordOne']);
         Route::get('/attendance', [CoachSessionController::class, 'myAttendance']);
+
+        // Dashboard (T009, read-only, assigned only)
+        Route::get('/dashboard', [CoachDashboardController::class, 'index']);
 
         // Evaluations (T008, assigned only)
         Route::get('/evaluations', [CoachEvaluationController::class, 'index']);

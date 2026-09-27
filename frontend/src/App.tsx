@@ -32,6 +32,13 @@ import { CoachEvaluationNewPage } from './features/evaluations/pages/CoachEvalua
 import { CoachEvaluationDetailPage } from './features/evaluations/pages/CoachEvaluationDetailPage';
 import { AdminEvaluationsPage } from './features/evaluations/pages/AdminEvaluationsPage';
 import { AdminEvaluationDetailPage } from './features/evaluations/pages/AdminEvaluationDetailPage';
+import { AdminDashboardPage } from './features/reporting/pages/AdminDashboardPage';
+import { MembershipReportPage } from './features/reporting/pages/MembershipReportPage';
+import { PaymentsReportPage } from './features/reporting/pages/PaymentsReportPage';
+import { AttendanceReportPage } from './features/reporting/pages/AttendanceReportPage';
+import { EvaluationsReportPage } from './features/reporting/pages/EvaluationsReportPage';
+import { CoachDashboardPage } from './features/reporting/pages/CoachDashboardPage';
+import { StudentDashboardPage } from './features/reporting/pages/StudentDashboardPage';
 import './App.css';
 
 function App() {
@@ -60,7 +67,12 @@ function App() {
             <Route path="sessions/:id" element={<AdminSessionDetailPage />} />
             <Route path="evaluations" element={<AdminEvaluationsPage />} />
             <Route path="evaluations/:id" element={<AdminEvaluationDetailPage />} />
-            <Route index element={<Navigate to="registrations" replace />} />
+            <Route path="dashboard" element={<AdminDashboardPage />} />
+            <Route path="reports/membership" element={<MembershipReportPage />} />
+            <Route path="reports/payments" element={<PaymentsReportPage />} />
+            <Route path="reports/attendance" element={<AttendanceReportPage />} />
+            <Route path="reports/evaluations" element={<EvaluationsReportPage />} />
+            <Route index element={<Navigate to="dashboard" replace />} />
           </Route>
 
           <Route
@@ -85,7 +97,8 @@ function App() {
             <Route path="attendance/:id" element={<StudentAttendanceDetailPage />} />
             <Route path="evaluations" element={<StudentEvaluationsPage />} />
             <Route path="evaluations/:id" element={<StudentEvaluationDetailPage />} />
-            <Route index element={<Navigate to="extracurriculars" replace />} />
+            <Route path="dashboard" element={<StudentDashboardPage />} />
+            <Route index element={<Navigate to="dashboard" replace />} />
           </Route>
 
           <Route
@@ -104,7 +117,8 @@ function App() {
             <Route path="evaluations" element={<CoachEvaluationsPage />} />
             <Route path="evaluations/new" element={<CoachEvaluationNewPage />} />
             <Route path="evaluations/:id" element={<CoachEvaluationDetailPage />} />
-            <Route index element={<Navigate to="sessions" replace />} />
+            <Route path="dashboard" element={<CoachDashboardPage />} />
+            <Route index element={<Navigate to="dashboard" replace />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/login" replace />} />

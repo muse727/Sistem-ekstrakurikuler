@@ -13,8 +13,11 @@ use App\Http\Controllers\Api\V1\ExtracurricularController;
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\Admin\PaymentController as AdminPaymentController;
+use App\Http\Controllers\Api\V1\Admin\EvaluationController as AdminEvaluationController;
 use App\Http\Controllers\Api\V1\Admin\SessionController as AdminSessionController;
+use App\Http\Controllers\Api\V1\Coach\EvaluationController as CoachEvaluationController;
 use App\Http\Controllers\Api\V1\Coach\SessionController as CoachSessionController;
+use App\Http\Controllers\Api\V1\Student\EvaluationController as StudentEvaluationController;
 use App\Http\Controllers\Api\V1\Student\PaymentController as StudentPaymentController;
 use App\Http\Controllers\Api\V1\Student\RegistrationController as StudentRegistrationController;
 use App\Http\Controllers\Api\V1\Student\SessionController as StudentSessionController;
@@ -115,6 +118,14 @@ Route::prefix('v1')->group(function () {
         Route::post('/sessions/{session}/attendance', [AdminSessionController::class, 'recordBulk']);
         Route::post('/sessions/{session}/attendance/{attendance}', [AdminSessionController::class, 'correct']);
 
+        // Evaluations (T008)
+        Route::get('/evaluations', [AdminEvaluationController::class, 'index']);
+        Route::get('/evaluations/{evaluation}', [AdminEvaluationController::class, 'show']);
+        Route::patch('/evaluations/{evaluation}', [AdminEvaluationController::class, 'update']);
+        Route::post('/evaluations/{evaluation}/publish', [AdminEvaluationController::class, 'publish']);
+        Route::post('/evaluations/{evaluation}/unpublish', [AdminEvaluationController::class, 'unpublish']);
+        Route::get('/evaluations/{evaluation}/summary', [AdminEvaluationController::class, 'summary']);
+
         Route::get('/test', function () {
             return response()->json(['success' => true, 'message' => 'Admin authorized']);
         });
@@ -140,6 +151,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/sessions/{session}', [StudentSessionController::class, 'show']);
         Route::get('/attendance', [StudentSessionController::class, 'attendance']);
         Route::get('/attendance/{attendance}', [StudentSessionController::class, 'showAttendance']);
+
+        // Evaluations (T008, own published only)
+        Route::get('/evaluations', [StudentEvaluationController::class, 'index']);
+        Route::get('/evaluations/{evaluation}', [StudentEvaluationController::class, 'show']);
+        Route::get('/evaluations/{evaluation}/summary', [StudentEvaluationController::class, 'summary']);
     });
 
     // Coach sessions & attendance (T007, assigned only)
@@ -151,6 +167,15 @@ Route::prefix('v1')->group(function () {
         Route::post('/sessions/{session}/attendance', [CoachSessionController::class, 'recordBulk']);
         Route::post('/sessions/{session}/attendance/{student}', [CoachSessionController::class, 'recordOne']);
         Route::get('/attendance', [CoachSessionController::class, 'myAttendance']);
+
+        // Evaluations (T008, assigned only)
+        Route::get('/evaluations', [CoachEvaluationController::class, 'index']);
+        Route::get('/evaluations/eligible', [CoachEvaluationController::class, 'eligible']);
+        Route::get('/evaluations/{evaluation}', [CoachEvaluationController::class, 'show']);
+        Route::post('/evaluations', [CoachEvaluationController::class, 'store']);
+        Route::patch('/evaluations/{evaluation}', [CoachEvaluationController::class, 'update']);
+        Route::post('/evaluations/{evaluation}/publish', [CoachEvaluationController::class, 'publish']);
+        Route::get('/evaluations/{evaluation}/summary', [CoachEvaluationController::class, 'summary']);
     });
 
     // Protected check-in photo (owner coach + admin/super_admin only)

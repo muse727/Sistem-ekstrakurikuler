@@ -250,5 +250,39 @@ class DatabaseSeeder extends Seeder
             } catch (\Throwable $e) {
             }
         }
+
+        // 11. Demo evaluations (T008, fake dev data only: 1 DRAFT midterm + 1 PUBLISHED final)
+        $coachUser = User::where('email', 'coach@example.test')->first();
+        if (isset($ekskul1, $academicYear, $student1, $student2) && $coachUser && $admin) {
+            try {
+                $evalSvc = app(\App\Services\EvaluationService::class);
+                $reg1 = \App\Models\ExtracurricularRegistration::where([
+                    ['student_id', $student1->id],
+                    ['extracurricular_id', $ekskul1->id],
+                    ['academic_year_id', $academicYear->id],
+                ])->first();
+                $reg2 = \App\Models\ExtracurricularRegistration::where([
+                    ['student_id', $student2->id],
+                    ['extracurricular_id', $ekskul1->id],
+                    ['academic_year_id', $academicYear->id],
+                ])->first();
+                if ($reg1) {
+                    $evalSvc->createDraft($coachUser, (int) $reg1->id, 'midterm', [
+                        'attendance_score' => 85,
+                        'activity_score' => 90,
+                    ], 'Contoh draft T008 (belum lengkap, belum publish).');
+                }
+                if ($reg2) {
+                    $published = $evalSvc->createDraft($coachUser, (int) $reg2->id, 'final', [
+                        'attendance_score' => 90,
+                        'activity_score' => 85,
+                        'skill_score' => 80,
+                        'discipline_score' => 95,
+                    ], 'Contoh evaluasi published T008.');
+                    $evalSvc->publish($coachUser, $published);
+                }
+            } catch (\Throwable $e) {
+            }
+        }
     }
 }

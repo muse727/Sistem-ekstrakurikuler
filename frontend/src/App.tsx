@@ -25,6 +25,13 @@ import { StudentSessionsPage } from './features/attendance/pages/StudentSessions
 import { StudentSessionDetailPage } from './features/attendance/pages/StudentSessionDetailPage';
 import { StudentAttendancePage } from './features/attendance/pages/StudentAttendancePage';
 import { StudentAttendanceDetailPage } from './features/attendance/pages/StudentAttendanceDetailPage';
+import { StudentEvaluationsPage } from './features/evaluations/pages/StudentEvaluationsPage';
+import { StudentEvaluationDetailPage } from './features/evaluations/pages/StudentEvaluationDetailPage';
+import { CoachEvaluationsPage } from './features/evaluations/pages/CoachEvaluationsPage';
+import { CoachEvaluationNewPage } from './features/evaluations/pages/CoachEvaluationNewPage';
+import { CoachEvaluationDetailPage } from './features/evaluations/pages/CoachEvaluationDetailPage';
+import { AdminEvaluationsPage } from './features/evaluations/pages/AdminEvaluationsPage';
+import { AdminEvaluationDetailPage } from './features/evaluations/pages/AdminEvaluationDetailPage';
 import './App.css';
 
 function App() {
@@ -51,6 +58,8 @@ function App() {
             <Route path="payments/:id" element={<AdminPaymentDetailPage />} />
             <Route path="sessions" element={<AdminSessionsPage />} />
             <Route path="sessions/:id" element={<AdminSessionDetailPage />} />
+            <Route path="evaluations" element={<AdminEvaluationsPage />} />
+            <Route path="evaluations/:id" element={<AdminEvaluationDetailPage />} />
             <Route index element={<Navigate to="registrations" replace />} />
           </Route>
 
@@ -74,6 +83,8 @@ function App() {
             <Route path="sessions/:id" element={<StudentSessionDetailPage />} />
             <Route path="attendance" element={<StudentAttendancePage />} />
             <Route path="attendance/:id" element={<StudentAttendanceDetailPage />} />
+            <Route path="evaluations" element={<StudentEvaluationsPage />} />
+            <Route path="evaluations/:id" element={<StudentEvaluationDetailPage />} />
             <Route index element={<Navigate to="extracurriculars" replace />} />
           </Route>
 
@@ -90,6 +101,9 @@ function App() {
             <Route path="sessions" element={<CoachSessionsPage />} />
             <Route path="sessions/:id" element={<CoachSessionDetailPage />} />
             <Route path="attendance" element={<CoachAttendancePage />} />
+            <Route path="evaluations" element={<CoachEvaluationsPage />} />
+            <Route path="evaluations/new" element={<CoachEvaluationNewPage />} />
+            <Route path="evaluations/:id" element={<CoachEvaluationDetailPage />} />
             <Route index element={<Navigate to="sessions" replace />} />
           </Route>
 

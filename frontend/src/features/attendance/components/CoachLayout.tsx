@@ -27,6 +27,9 @@ export function CoachLayout() {
           <NavLink to="/coach/attendance" className={({ isActive }) => (isActive ? 'active' : '')}>
             Absensi
           </NavLink>
+          <NavLink to="/coach/evaluations" className={({ isActive }) => (isActive ? 'active' : '')}>
+            Evaluasi
+          </NavLink>
         </nav>
         <button className="admin-logout" onClick={handleLogout}>
           Logout

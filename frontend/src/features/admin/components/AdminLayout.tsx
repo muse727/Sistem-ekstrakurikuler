@@ -44,6 +44,9 @@ export function AdminLayout() {
           <NavLink to="/admin/sessions" className={({ isActive }) => (isActive ? 'active' : '')}>
             Sesi & Absensi
           </NavLink>
+          <NavLink to="/admin/evaluations" className={({ isActive }) => (isActive ? 'active' : '')}>
+            Evaluasi
+          </NavLink>
         </nav>
         <button className="admin-logout" onClick={handleLogout}>
           Logout

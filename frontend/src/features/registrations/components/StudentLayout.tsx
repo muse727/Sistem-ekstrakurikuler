@@ -36,6 +36,9 @@ export function StudentLayout() {
           <NavLink to="/student/attendance" className={({ isActive }) => (isActive ? 'active' : '')}>
             Absensiku
           </NavLink>
+          <NavLink to="/student/evaluations" className={({ isActive }) => (isActive ? 'active' : '')}>
+            Evaluasiku
+          </NavLink>
         </nav>
         <button className="admin-logout" onClick={handleLogout}>
           Logout

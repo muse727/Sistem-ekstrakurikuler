@@ -268,7 +268,10 @@ class EvaluationService
         $evaluation->evaluated_at = now();
         $evaluation->save();
 
-        return $evaluation->fresh()->load(['student', 'registration', 'extracurricular', 'academicYear', 'evaluator']);
+        $published = $evaluation->fresh()->load(['student', 'registration', 'extracurricular', 'academicYear', 'evaluator']);
+        app(\App\Services\Notification\NotificationService::class)->notifyEvaluationPublished($published);
+
+        return $published;
     }
 
     public function unpublish(User $actor, ExtracurricularEvaluation $evaluation): ExtracurricularEvaluation

@@ -156,7 +156,10 @@ class PaymentService
 
             $invoice->update(['status' => InvoiceStatus::PENDING_VERIFICATION]);
 
-            return $proof->fresh()->load(['latestVerification']);
+            $proofResult = $proof->fresh()->load(['latestVerification']);
+            app(\App\Services\Notification\NotificationService::class)->notifyPaymentProofSubmitted($invoice->fresh()->load(['registration.student', 'registration.extracurricular']));
+
+            return $proofResult;
         });
     }
 
@@ -201,7 +204,10 @@ class PaymentService
 
             $this->activateAfterPayment($invoice->fresh());
 
-            return $invoice->fresh()->load(['registration.student', 'registration.extracurricular', 'registration.academicYear', 'proofs.verifications', 'proofs.latestVerification']);
+            $result = $invoice->fresh()->load(['registration.student', 'registration.extracurricular', 'registration.academicYear', 'proofs.verifications', 'proofs.latestVerification']);
+            app(\App\Services\Notification\NotificationService::class)->notifyPaymentProofApproved($result);
+
+            return $result;
         });
     }
 
@@ -250,7 +256,10 @@ class PaymentService
 
             $invoice->update(['status' => InvoiceStatus::REJECTED]);
 
-            return $invoice->fresh()->load(['registration.student', 'registration.extracurricular', 'registration.academicYear', 'proofs.verifications', 'proofs.latestVerification']);
+            $result = $invoice->fresh()->load(['registration.student', 'registration.extracurricular', 'registration.academicYear', 'proofs.verifications', 'proofs.latestVerification']);
+            app(\App\Services\Notification\NotificationService::class)->notifyPaymentProofRejected($result);
+
+            return $result;
         });
     }
 

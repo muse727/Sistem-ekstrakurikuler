@@ -39,6 +39,7 @@ import { AttendanceReportPage } from './features/reporting/pages/AttendanceRepor
 import { EvaluationsReportPage } from './features/reporting/pages/EvaluationsReportPage';
 import { CoachDashboardPage } from './features/reporting/pages/CoachDashboardPage';
 import { StudentDashboardPage } from './features/reporting/pages/StudentDashboardPage';
+import { NotificationsPage } from './features/notifications/components/NotificationsPage';
 import './App.css';
 
 function App() {
@@ -72,6 +73,7 @@ function App() {
             <Route path="reports/payments" element={<PaymentsReportPage />} />
             <Route path="reports/attendance" element={<AttendanceReportPage />} />
             <Route path="reports/evaluations" element={<EvaluationsReportPage />} />
+            <Route path="notifications" element={<NotificationsPage role="admin" />} />
             <Route index element={<Navigate to="dashboard" replace />} />
           </Route>
 
@@ -98,6 +100,7 @@ function App() {
             <Route path="evaluations" element={<StudentEvaluationsPage />} />
             <Route path="evaluations/:id" element={<StudentEvaluationDetailPage />} />
             <Route path="dashboard" element={<StudentDashboardPage />} />
+            <Route path="notifications" element={<NotificationsPage role="student" />} />
             <Route index element={<Navigate to="dashboard" replace />} />
           </Route>
 
@@ -118,6 +121,7 @@ function App() {
             <Route path="evaluations/new" element={<CoachEvaluationNewPage />} />
             <Route path="evaluations/:id" element={<CoachEvaluationDetailPage />} />
             <Route path="dashboard" element={<CoachDashboardPage />} />
+            <Route path="notifications" element={<NotificationsPage role="coach" />} />
             <Route index element={<Navigate to="dashboard" replace />} />
           </Route>
 

@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\V1\Student\PaymentController as StudentPaymentContr
 use App\Http\Controllers\Api\V1\Student\RegistrationController as StudentRegistrationController;
 use App\Http\Controllers\Api\V1\Student\SessionController as StudentSessionController;
 use App\Http\Controllers\Api\V1\VenueController;
+use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Middleware\EnsureUserHasRole;
 use Illuminate\Support\Facades\Route;
 
@@ -198,6 +199,14 @@ Route::prefix('v1')->group(function () {
 
     // Protected check-in photo (owner coach + admin/super_admin only)
     Route::middleware(['auth:sanctum'])->get('/check-ins/{checkIn}/photo', [AdminSessionController::class, 'checkInPhoto'])->name('api.v1.checkin.photo');
+
+    // Notification & Activity Center (T010, all authenticated roles)
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::get('/notifications', [NotificationController::class, 'index']);
+        Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount']);
+        Route::post('/notifications/{notification}/read', [NotificationController::class, 'markRead']);
+        Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead']);
+    });
 
     // Example Role Restricted Test Endpoints
     Route::middleware(['auth:sanctum', EnsureUserHasRole::class.':coach'])->get('/coach/test', function () {

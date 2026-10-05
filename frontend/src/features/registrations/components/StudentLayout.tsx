@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/hooks/useAuth';
+import { NotificationBell } from '../../notifications/components/NotificationBell';
 import '../../admin/components/admin.css';
 
 export function StudentLayout() {
@@ -15,7 +16,7 @@ export function StudentLayout() {
   return (
     <div className="admin-shell">
       <aside className="admin-sidebar">
-        <div className="admin-brand">Ekstrakurikuler · Siswa</div>
+        <div className="admin-brand" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><span>Ekstrakurikuler · Siswa</span><NotificationBell role={user?.role} basePath="/student/notifications" /></div>
         <div className="admin-user">
           <div className="admin-user-name">{user?.name}</div>
           <div className="admin-user-role">{user?.role}</div>
@@ -41,6 +42,9 @@ export function StudentLayout() {
           </NavLink>
           <NavLink to="/student/dashboard" className={({ isActive }) => (isActive ? 'active' : '')}>
             Dashboard
+          </NavLink>
+          <NavLink to="/student/notifications" className={({ isActive }) => (isActive ? 'active' : '')}>
+            Notifikasi
           </NavLink>
         </nav>
         <button className="admin-logout" onClick={handleLogout}>

@@ -128,7 +128,10 @@ class RegistrationService
                 'submitted_at' => now(),
             ]);
 
-            return $registration->fresh()->load(['student', 'extracurricular', 'academicYear']);
+            $created = $registration->fresh()->load(['student', 'extracurricular', 'academicYear']);
+            app(\App\Services\Notification\NotificationService::class)->notifyRegistrationSubmitted($created);
+
+            return $created;
         });
     }
 
@@ -151,7 +154,10 @@ class RegistrationService
             $fresh = $registration->fresh();
             app(\App\Services\PaymentService::class)->createInvoiceForRegistration($fresh);
 
-            return $fresh->fresh()->load(['student', 'extracurricular', 'academicYear', 'approver', 'rejector', 'canceller', 'invoices']);
+            $result = $fresh->fresh()->load(['student', 'extracurricular', 'academicYear', 'approver', 'rejector', 'canceller', 'invoices']);
+            app(\App\Services\Notification\NotificationService::class)->notifyRegistrationApproved($result);
+
+            return $result;
         });
     }
 
@@ -173,7 +179,10 @@ class RegistrationService
                 'rejection_reason' => $reason,
             ]);
 
-            return $registration->fresh()->load(['student', 'extracurricular', 'academicYear', 'approver', 'rejector', 'canceller']);
+            $result = $registration->fresh()->load(['student', 'extracurricular', 'academicYear', 'approver', 'rejector', 'canceller']);
+            app(\App\Services\Notification\NotificationService::class)->notifyRegistrationRejected($result);
+
+            return $result;
         });
     }
 
